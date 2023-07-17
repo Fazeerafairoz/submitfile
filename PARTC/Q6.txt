@@ -1,0 +1,29 @@
+.server phyton
+import socket
+
+def prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+# Server configuration
+UDP_IP = "127.0.0.1"
+UDP_PORT = 5005
+
+# Create a UDP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
+
+print("Server listening on {}:{}".format(UDP_IP, UDP_PORT))
+
+while True:
+    data, addr = sock.recvfrom(1024)
+    number = int(data.decode())
+
+    result = "This is a Prime Number" if prime(number) else "This is not a Prime Number"
+
+    sock.sendto(result.encode(), addr)
+
